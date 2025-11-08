@@ -10,5 +10,3 @@ You’re free to fork, modify, and share — including adding donation links —
 - It remains free to access (no paywalls or sales)
 - You credit the original author
 - You license your version under the same terms (CC BY-NC-SA 4.0)
-
-You’re welcome to add donation links or promote your projects — just keep the extension free to access and licensed under CC BY-NC-SA 4.0.
