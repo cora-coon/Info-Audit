@@ -1,0 +1,2 @@
+# Info-Audit
+An extension to examine and trace ST WorldInfo entries — designed to help users identify which entries are triggered, understand why they appear, and optimize them for clarity and token efficiency.
