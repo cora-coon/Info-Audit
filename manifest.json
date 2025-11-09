@@ -1,0 +1,15 @@
+{
+    "display_name": "Info-Audit",
+    "loading_order": 1,
+    "requires": [],
+    "optional": [],
+    "dependencies": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "Cora Coon",
+    "version": "0.0.1",
+    "license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License",
+    "homePage": "https://github.com/cora-coon/Info-Audit.git",
+    "auto_update": true,
+    "minimum_client_version": "1.13.5"
+}
