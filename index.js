@@ -11,6 +11,12 @@ const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
 const defaultSettings = {};
 
+// Inline drawer toggle functionality
+document.querySelectorAll('.inline-drawer-toggle').forEach(toggle => {
+  toggle.addEventListener('click', () => {
+    toggle.parentElement.classList.toggle('openDrawer');
+  });
+});
 
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
@@ -47,10 +53,9 @@ jQuery(async () => {
   // This is an example of loading HTML from a file
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
 
-  // Append settingsHtml to extensions_settings
-  // extension_settings and extensions_settings2 are the left and right columns of the settings menu
-  // Left should be extensions that deal with system functions and right should be visual/UI related 
-  $("#extensions_settings").append(settingsHtml);
+  // Append settingsHtml to extensions_settings2, which is visual/UI related settings
+  $("#extensions_settings2").append(settingsHtml);
+
 
   // These are examples of listening for events
   $("#my_button").on("click", onButtonClick);

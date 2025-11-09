@@ -1,0 +1,14 @@
+.info-audit-settings {
+  display: block;
+  height: auto;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05); /* just to see it */
+}
+
+.inline-drawer-content {
+  display: none;
+}
+
+.inline-drawer.openDrawer .inline-drawer-content {
+  display: block;
+}
