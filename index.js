@@ -54,7 +54,7 @@ function onButtonClick() {
   );
 }
 
-// This function is called when the extension is loaded
+//loading settings html into settings menu
 jQuery(async () => {
     const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
     $("#extensions_settings2").append(settingsHtml);
@@ -67,23 +67,84 @@ jQuery(async () => {
 
 
 
-// Function to create and inject the button
+//function to reset the button's position
+function resetDraggableButtonPosition() {
+  const button = document.getElementById('draggable-icon-btn');
+  if (!button) return; // Do nothing if the button doesn't exist
+
+  //reset position to default (top-left corner)
+  const defaultTop = '20px';
+  const defaultLeft = '20px';
+  button.style.top = defaultTop;
+  button.style.left = defaultLeft;
+
+  //remove saved position from localStorage
+  localStorage.removeItem('draggableButtonPosition');
+
+  console.log('Draggable button position has been reset.');
+}
+
+
+//create a draggable button
 function createDraggableButton() {
-  // Check if the button already exists to avoid creating duplicates
   if (document.getElementById('draggable-icon-btn')) {
     return;
   }
 
-  // 1. Create the button element
   const button = document.createElement('button');
-
-  // 2. Set its ID and other attributes
   button.id = 'draggable-icon-btn';
-  button.setAttribute('aria-label', 'Draggable Search Icon');
-
-  // 3. Append the button to the main body of the page
+  button.setAttribute('aria-label', 'Hover to open Info-Audit panel (draggable)'); //accessibility label
   document.body.appendChild(button);
+
+  const savedPosition = localStorage.getItem('draggableButtonPosition');
+  if (savedPosition) {
+    const { top, left } = JSON.parse(savedPosition);
+    button.style.top = top;
+    button.style.left = left;
+  } else {
+    // If no position is saved, explicitly set to default
+    button.style.top = '20px';
+    button.style.left = '20px';
+  }
+
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  button.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - button.getBoundingClientRect().left;
+    offsetY = e.clientY - button.getBoundingClientRect().top;
+    button.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const newX = e.clientX - offsetX;
+    const newY = e.clientY - offsetY;
+    button.style.left = `${newX}px`;
+    button.style.top = `${newY}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    button.style.cursor = 'grab';
+    const finalPosition = { top: button.style.top, left: button.style.left };
+    localStorage.setItem('draggableButtonPosition', JSON.stringify(finalPosition));
+  });
 }
 
-// Run the function to create the button as soon as the script loads
+// --- NEW: Event Listener for the Settings Button ---
+// This listens for clicks anywhere on the page.
+document.addEventListener('click', (event) => {
+  // Check if the clicked element is our reset button
+  if (event.target.id === 'reset-icon-position-btn') {
+    resetDraggableButtonPosition();
+  }
+});
+
+
+// --- Run the initial setup ---
 createDraggableButton();
