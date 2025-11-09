@@ -17,7 +17,6 @@ const defaultSettings = {
      someSetting: 'default value',
 };
 const settingsContainer = document.querySelector('#extensions_settings2'); 
-settingsContainer.insertAdjacentHTML('beforeend', settingsHtml);
 
 
 //inline drawer toggle functionality
@@ -59,18 +58,13 @@ function onButtonClick() {
 
 // This function is called when the extension is loaded
 jQuery(async () => {
-  // This is an example of loading HTML from a file
   const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
-  
-
-  // Append settingsHtml to extensions_settings2, which is visual/UI related settings
   $("#extensions_settings2").append(settingsHtml);
 
-
-  // These are examples of listening for events
   $("#my_button").on("click", onButtonClick);
   $("#example_setting").on("input", onExampleInput);
 
-  // Load settings when starting things up (if you have any)
   loadSettings();
 });
+
+
