@@ -58,13 +58,18 @@ function onButtonClick() {
 
 // This function is called when the extension is loaded
 jQuery(async () => {
-  const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
-  $("#extensions_settings2").append(settingsHtml);
+  try {
+    const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
+    $("#extensions_settings2").append(settingsHtml);
 
-  $("#my_button").on("click", onButtonClick);
-  $("#example_setting").on("input", onExampleInput);
+    $("#my_button").on("click", onButtonClick);
+    $("#example_setting").on("input", onExampleInput);
 
-  loadSettings();
+    loadSettings();
+  } catch (err) {
+    console.error(`Extension "${extensionName}" failed to load:`, err);
+  }
 });
+
 
 
