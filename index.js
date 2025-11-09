@@ -57,7 +57,7 @@ function onButtonClick() {
 // This function is called when the extension is loaded
 jQuery(async () => {
     const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
-    $("#extensions_settings").append(settingsHtml);
+    $("#extensions_settings2").append(settingsHtml);
 
     $("#my_button").on("click", onButtonClick);
     $("#example_setting").on("input", onExampleInput);
@@ -67,3 +67,23 @@ jQuery(async () => {
 
 
 
+// Function to create and inject the button
+function createDraggableButton() {
+  // Check if the button already exists to avoid creating duplicates
+  if (document.getElementById('draggable-icon-btn')) {
+    return;
+  }
+
+  // 1. Create the button element
+  const button = document.createElement('button');
+
+  // 2. Set its ID and other attributes
+  button.id = 'draggable-icon-btn';
+  button.setAttribute('aria-label', 'Draggable Search Icon');
+
+  // 3. Append the button to the main body of the page
+  document.body.appendChild(button);
+}
+
+// Run the function to create the button as soon as the script loads
+createDraggableButton();

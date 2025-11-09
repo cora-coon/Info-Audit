@@ -1,14 +1,55 @@
+/*block to see
 .info-audit-settings {
   display: block;
   height: auto;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.05); /* just to see it */
-}
+  background: rgba(255, 255, 255, 0.05); 
+} */
+
 
 .inline-drawer-content {
   display: none;
-}
+} 
 
 .inline-drawer.openDrawer .inline-drawer-content {
   display: block;
+} 
+
+.info-audit-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--icon-color);
+}
+
+
+#draggable-icon-btn {
+  /* Positioning and Layering */
+  position: fixed; /* This makes it float over the page */
+  top: 20px;       /* Initial position from the top */
+  left: 20px;      /* Initial position from the left */
+  z-index: 1000;   /* Ensures it stays on top of other elements */
+
+  /* Sizing and Shape */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Makes it a circle */
+
+  /* Icon Styling */
+  background-image: url('assets/magnifying-glass-icon.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%; /* Adjust size of icon inside the button */
+  background-color: currentColor;
+
+  /* Visuals and Interaction */
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: grab; /* Indicates to the user that it can be moved */
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Style when the button is being clicked/dragged */
+#draggable-icon-btn:active {
+  cursor: grabbing;
+  transform: scale(1.1); /* Slightly enlarges the button on click */
 }
