@@ -1,8 +1,6 @@
 import { extension_settings, getContext, loadExtensionSettings } from "../../../extensions.js";
 import { saveSettingsDebounced } from "../../../../script.js";
 
-import './style.css';
-
 // The main script for the extension
 
 
