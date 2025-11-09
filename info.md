@@ -1,4 +1,12 @@
+9-Nov-25
+- Added icon button, including accessibility label. Made draggable, position fixed on page refresh. Included reset position button to extension settings.
+- Added info.md
+
+
 8-Nov-25
+- Used some examples provided by ST.
+- Made sure I had correct license.
+- Got a visible settings menu.
 - My initial commits didn’t always reflect every change. I am learning, experimenting, and sometimes forgetting things in the process. Going forward, I’ll commit less frequently and hopefully label things more clearly.
 
 

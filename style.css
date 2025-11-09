@@ -1,12 +1,4 @@
-/*block to see
-.info-audit-settings {
-  display: block;
-  height: auto;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.05); 
-} */
-
-
+/* settings drawer content */
 .inline-drawer-content {
   display: none;
 } 
@@ -15,41 +7,49 @@
   display: block;
 } 
 
-.info-audit-icon {
-  width: 32px;
-  height: 32px;
-  color: var(--icon-color);
-}
 
-
+/* draggable icon button styles */
 #draggable-icon-btn {
-  /* Positioning and Layering */
-  position: fixed; /* This makes it float over the page */
-  top: 20px;       /* Initial position from the top */
-  left: 20px;      /* Initial position from the left */
-  z-index: 1000;   /* Ensures it stays on top of other elements */
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
 
-  /* Sizing and Shape */
+/* size of clickable area */
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Makes it a circle */
 
-  /* Icon Styling */
-  background-image: url('assets/magnifying-glass-icon.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 70%; /* Adjust size of icon inside the button */
+ /* icon colour (default) */
+  color: #333; /* change to currentColor for inheritance */
+  
   background-color: currentColor;
 
-  /* Visuals and Interaction */
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  cursor: grab; /* Indicates to the user that it can be moved */
-  transition: transform 0.2s ease-in-out;
+  mask-image: url('assets/magnifying-glass-icon.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('assets/magnifying-glass-icon.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+
+  /* visuals and interactivity */
+  background-image: none;
+  border: none;
+  border-radius: 0;
+  background-color: currentColor; /* mask colour */
+
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+
+  cursor: grab;
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-/* Style when the button is being clicked/dragged */
+#draggable-icon-btn:hover {
+  color: #be74be; /* hover colour (default) */
+}
+
 #draggable-icon-btn:active {
   cursor: grabbing;
-  transform: scale(1.1); /* Slightly enlarges the button on click */
+  transform: scale(1.1); /* increase size on click */
 }

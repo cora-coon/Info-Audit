@@ -1,8 +1,6 @@
+//imports and dependencies
 import { extension_settings, getContext, loadExtensionSettings } from "../../../extensions.js";
 import { saveSettingsDebounced } from "../../../../script.js";
-
-// The main script for the extension
-
 
 
 //extension location and settings
@@ -102,7 +100,7 @@ function createDraggableButton() {
     button.style.top = top;
     button.style.left = left;
   } else {
-    // If no position is saved, explicitly set to default
+    //default if no saved position
     button.style.top = '20px';
     button.style.left = '20px';
   }
@@ -146,5 +144,5 @@ document.addEventListener('click', (event) => {
 });
 
 
-// --- Run the initial setup ---
+//run the function to create the draggable button
 createDraggableButton();
