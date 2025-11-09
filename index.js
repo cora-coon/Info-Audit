@@ -1,17 +1,28 @@
-import { extension_settings, getContext, loadExtensionSettings } from "../../../extensions.js";
+import { extension_settings, getContext, setExtensionSettings, loadExtensionSettings } from "../../../extensions.js";
 import { saveSettingsDebounced } from "../../../../script.js";
+
+import './style.css';
+import settingsHtml from './settings.html';
+
 
 // The main script for the extension
 
 
 
-// Extension location and settings
+//extension location and settings
 const extensionName = "Info-Audit";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
-const defaultSettings = {};
 
-// Inline drawer toggle functionality
+//default settings for the extension
+const defaultSettings = {
+     someSetting: 'default value',
+};
+const settingsContainer = document.querySelector('#extensions_settings2'); 
+settingsContainer.insertAdjacentHTML('beforeend', settingsHtml);
+
+
+//inline drawer toggle functionality
 document.querySelectorAll('.inline-drawer-toggle').forEach(toggle => {
   toggle.addEventListener('click', () => {
     toggle.parentElement.classList.toggle('openDrawer');
