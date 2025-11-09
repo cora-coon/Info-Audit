@@ -1,4 +1,4 @@
-import { extension_settings, getContext, setExtensionSettings, loadExtensionSettings } from "../../../extensions.js";
+import { extension_settings, getContext, loadExtensionSettings } from "../../../extensions.js";
 import { saveSettingsDebounced } from "../../../../script.js";
 
 import './style.css';
@@ -58,17 +58,13 @@ function onButtonClick() {
 
 // This function is called when the extension is loaded
 jQuery(async () => {
-  try {
     const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
-    $("#extensions_settings2").append(settingsHtml);
+    $("#extensions_settings").append(settingsHtml);
 
     $("#my_button").on("click", onButtonClick);
     $("#example_setting").on("input", onExampleInput);
 
     loadSettings();
-  } catch (err) {
-    console.error(`Extension "${extensionName}" failed to load:`, err);
-  }
 });
 
 
