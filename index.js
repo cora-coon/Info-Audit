@@ -2,8 +2,6 @@ import { extension_settings, getContext, setExtensionSettings, loadExtensionSett
 import { saveSettingsDebounced } from "../../../../script.js";
 
 import './style.css';
-import settingsHtml from './settings.html';
-
 
 // The main script for the extension
 
