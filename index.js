@@ -62,7 +62,8 @@ function onButtonClick() {
 // This function is called when the extension is loaded
 jQuery(async () => {
   // This is an example of loading HTML from a file
-  const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
+  const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
+  
 
   // Append settingsHtml to extensions_settings2, which is visual/UI related settings
   $("#extensions_settings2").append(settingsHtml);
