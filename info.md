@@ -1,5 +1,5 @@
 10-Nov-25
-
+- Added info panel to magnifying glass icon. Hover over to display. Currently shows coordinates as temporary information. Follows icon when dragging.
 
 9-Nov-25
 - Added magnifying glass button (icon from [game-icons.net](https://game-icons.net)), including accessibility label. Made draggable, position fixed on page refresh. Included reset position button to extension settings.
