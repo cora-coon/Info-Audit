@@ -53,3 +53,62 @@
   cursor: grabbing;
   transform: scale(1.1); /* increase size on click */
 }
+
+
+/* panel hidden by default */
+.info-panel {
+  position: fixed;             /* will be positioned via JS */
+  min-width: 180px;
+  background: #333;
+  padding: 8px 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  z-index: 1000;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: 
+    opacity 160ms ease, 
+    transform 160ms ease, 
+    visibility 0s linear 160ms; 
+}
+
+/* show when hovering */
+#draggable-icon-btn:hover + .info-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: 
+    opacity 160ms ease, 
+    transform 160ms ease, 
+    visibility 0s;
+}
+
+/* wrapper that contains the icon + panel */
+#info-panel-wrapper {
+  position: fixed;   /* follows the viewport */
+  z-index: 1000;     
+  display: inline-block;
+
+  pointer-events: auto;
+}
+
+/* make the panel absolutely positioned relative to the wrapper */
+#info-panel-wrapper .info-panel {
+  position: absolute;  
+  top: calc(100% + 6px);
+  left: 0;
+  transform: translateY(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 160ms ease, transform 160ms ease, visibility 0s linear 160ms;
+  z-index: 9999; /* make sure panel is above everything */
+}
+
+/* when wrapper has the class 'open', show the panel */
+#info-panel-wrapper.open .info-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 0s;
+}
