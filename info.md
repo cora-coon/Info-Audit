@@ -1,5 +1,8 @@
+10-Nov-25
+
+
 9-Nov-25
-- Added icon button, including accessibility label. Made draggable, position fixed on page refresh. Included reset position button to extension settings.
+- Added magnifying glass button (icon from [game-icons.net](https://game-icons.net)), including accessibility label. Made draggable, position fixed on page refresh. Included reset position button to extension settings.
 - Added info.md
 
 
