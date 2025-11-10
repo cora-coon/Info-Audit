@@ -2,7 +2,6 @@
 import { extension_settings, getContext, loadExtensionSettings } from "../../../extensions.js";
 import { saveSettingsDebounced } from "../../../../script.js";
 
-
 //extension location and settings
 const extensionName = "Info-Audit";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
