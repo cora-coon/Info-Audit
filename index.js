@@ -285,7 +285,7 @@ function createDraggableButton() {
       updatePanelContent();
     });
 
-    //pointerup ends dragging
+    //mouse-click release ends dragging
     const finishPointer = (e) => {
       if (!_dragState.isDragging || e.pointerId !== _dragState.pointerId) return;
 
