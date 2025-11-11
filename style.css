@@ -1,3 +1,5 @@
+/* --- INFO-AUDIT EXTENSION STYLES --- */
+
 /* settings drawer content */
 .inline-drawer-content {
   display: none;
@@ -8,20 +10,20 @@
 } 
 
 
+/* --- INFO-AUDIT ICON STYLES --- */
+
 /* draggable icon button styles */
 #draggable-icon-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
+  position: absolute; /* allow the button to be positioned inside the wrapper */
+  
   z-index: 1000;
 
-/* size of clickable area */
+  /* size of clickable area */
   width: 40px;
   height: 40px;
 
- /* icon colour (default) */
+  /* icon colour (default) */
   color: #333; /* change to currentColor for inheritance */
-  
   background-color: currentColor;
 
   mask-image: url('assets/magnifying-glass-icon.svg');
@@ -45,6 +47,7 @@
   transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
+
 #draggable-icon-btn:hover {
   color: #be74be; /* hover colour (default) */
 }
@@ -54,10 +57,18 @@
   transform: scale(1.1); /* increase size on click */
 }
 
+/* add styles for locked state */
+#draggable-icon-btn[data-locked="true"] {
+  cursor: not-allowed !important;
+  filter: brightness(0.7);
+}
+
+
+/* --- INFO-AUDIT PANEL STYLES --- */
 
 /* panel hidden by default */
 .info-panel {
-  position: fixed;             /* will be positioned via JS */
+  position: fixed;             /* will be positioned in index.js */
   min-width: 180px;
   background: #333;
   padding: 8px 10px;
@@ -86,29 +97,29 @@
 
 /* wrapper that contains the icon + panel */
 #info-panel-wrapper {
-  position: fixed;   /* follows the viewport */
-  z-index: 1000;     
+  position: fixed;
+  z-index: 1000;
   display: inline-block;
-
   pointer-events: auto;
 }
 
-/* make the panel absolutely positioned relative to the wrapper */
+/* panel inside wrapper */
 #info-panel-wrapper .info-panel {
-  position: absolute;  
+  position: absolute;
   top: calc(100% + 6px);
   left: 0;
   transform: translateY(6px);
   opacity: 0;
   visibility: hidden;
   transition: opacity 160ms ease, transform 160ms ease, visibility 0s linear 160ms;
-  z-index: 9999; /* make sure panel is above everything */
+  z-index: 9999;
 }
 
-/* when wrapper has the class 'open', show the panel */
+/* show when wrapper has panel open */
 #info-panel-wrapper.open .info-panel {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  transition: opacity 160ms ease, transform 160ms ease, visibility 0s;
 }
+
+
