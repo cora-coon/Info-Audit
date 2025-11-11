@@ -1,3 +1,7 @@
+11-Nov-25
+- Made magnifying glass icon able to lock into position with right-click. Added toggle lock/unlock checkbox to extension settings panel.
+- When moused over info panel, panel stays until moused off.
+
 10-Nov-25
 - Added info panel to magnifying glass icon. Hover over to display. Currently shows coordinates as temporary information. Follows icon when dragging.
 
@@ -19,6 +23,6 @@ This repository documents my learning process. I'm keeping early commits visible
 <details>
 <summary><i>Includes AI-assisted learning and experimentation.</i></summary>
 
-Some commits may include AI-suggested comments or code. I’m learning as I go, and I’m trying to be transparent about that. Not everything will be perfect, but it’s mine, and I’m figuring it out one step at a time.
+Some commits may include AI-suggested comments or code. I’m learning as I go, and I’m trying to be transparent about that. It's not perfect, but it's mine, and I'm taking it one-step at a time.
 
 </details>

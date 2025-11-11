@@ -13,6 +13,7 @@ const extensionSettings = extension_settings[extensionName];
 //default settings for the extension
 const defaultSettings = {
   someSetting: 'default value',
+  lockIconPosition: false,
 };
 const settingsContainer = document.querySelector('#extensions_settings2'); 
 
@@ -25,53 +26,149 @@ document.querySelectorAll('.inline-drawer-toggle').forEach(toggle => {
 });
 
 
-//loads settings into the UI
+// Lock helpers (sync between settings, localStorage, checkbox and UI)
+function getSavedLockState() {
+  //prefer extension settings if available, otherwise fall back to localStorage for compatibility
+  try {
+    if (extension_settings && extension_settings[extensionName] && typeof extension_settings[extensionName].lockIconPosition !== 'undefined') {
+      return Boolean(extension_settings[extensionName].lockIconPosition);
+    }
+  } catch (err) {
+    //ignore and fall through
+  }
+  try {
+    return localStorage.getItem('iconLocked') === 'true';
+  } catch (err) {
+    return false;
+  }
+}
+
+// --- lock helpers (sync settings, localStorage, checkbox and UI) ---
+//set global flag used by drag logic
+function setLockState(isLocked) {
+  const prev = Boolean(window.isLocked);
+  const next = Boolean(isLocked);
+
+  //if nothing changed, sync UI quietly
+  if (prev === next) {
+    window.isLocked = next;
+
+    //update button UI if present
+    const btn = document.getElementById('draggable-icon-btn');
+    if (btn) {
+      if (next) btn.setAttribute('data-locked', 'true');
+      else btn.removeAttribute('data-locked');
+    }
+
+    //update extension settings and save
+    extension_settings[extensionName] = extension_settings[extensionName] || {};
+    extension_settings[extensionName].lockIconPosition = next;
+    try { saveSettingsDebounced(); } catch (err) {}
+
+    //save localStorage copy for backward compatibility
+    try { localStorage.setItem('iconLocked', next); } catch (err) {}
+
+    //update label + checkbox
+    updateLockLabel(next);
+    const checkbox = document.getElementById('lock-toggle-icon-position');
+    if (checkbox) checkbox.checked = next;
+
+    return false; //no change
+  }
+
+  //actual change
+  window.isLocked = next;
+
+  //update button UI
+  const btn = document.getElementById('draggable-icon-btn');
+  if (btn) {
+    if (next) btn.setAttribute('data-locked', 'true');
+    else btn.removeAttribute('data-locked');
+  }
+
+  //update settings and save
+  extension_settings[extensionName] = extension_settings[extensionName] || {};
+  extension_settings[extensionName].lockIconPosition = next;
+  try { saveSettingsDebounced(); } catch (err) {}
+
+  //save localStorage copy
+  try { localStorage.setItem('iconLocked', next); } catch (err) {}
+
+  //update label + checkbox
+  updateLockLabel(next);
+  const checkbox = document.getElementById('lock-toggle-icon-position');
+  if (checkbox) checkbox.checked = next;
+
+  return true; //state changed
+}
+
+//loads settings into ui
 async function loadSettings() {
-  //create the settings if they don't exist
   extension_settings[extensionName] = extension_settings[extensionName] || {};
   if (Object.keys(extension_settings[extensionName]).length === 0) {
     Object.assign(extension_settings[extensionName], defaultSettings);
   }
 
-  //update settings in the UI
+  // Example checkbox setting
   if (document.querySelector("#example_setting")) {
     $("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
   }
+
+  //update lock toggle checkbox
+  if (document.querySelector("#lock-toggle-icon-position")) {
+    const isLocked = extension_settings[extensionName].lockIconPosition;
+    $("#lock-toggle-icon-position").prop("checked", isLocked).trigger("input");
+    updateLockLabel(isLocked);
+  }
+
+  //sync global state
+  setLockState(extension_settings[extensionName].lockIconPosition || false);
 }
 
+//update label text for lock toggle
+function updateLockLabel(isLocked) {
+  const label = document.querySelector("label[for='lock-toggle-icon-position']");
+  if (label) label.textContent = isLocked ? "Icon Position Locked" : "Icon Position Unlocked";
+}
 
+//called when lock toggle checkbox changes
+function onLockToggleInput(event) {
+  const isLocked = Boolean($(event.target).prop("checked"));
+  setLockState(isLocked); // no toast
+}
+
+// Example checkbox input handler
 function onExampleInput(event) {
   const value = Boolean($(event.target).prop("checked"));
   extension_settings[extensionName].example_setting = value;
   saveSettingsDebounced();
 }
 
-// Called when the example button is clicked
+// Example button click handler
 function onButtonClick() {
-  // You can do whatever you want here
-  // Let's make a popup appear with the checked setting
   toastr.info(
     `The checkbox is ${extension_settings[extensionName].example_setting ? "checked" : "not checked"}`,
     "A popup appeared because you clicked the button!"
   );
 }
 
-//loading settings html into settings menu
+//load settings html and attach handlers
 jQuery(async () => {
   try {
     const settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
     $("#extensions_settings2").append(settingsHtml);
 
-    //attach handlers (only if elements exist)
+    //attach handlers
     $("#my_button").on("click", onButtonClick);
     $("#example_setting").on("input", onExampleInput);
+    $("#lock-toggle-icon-position").on("input", onLockToggleInput);
 
     loadSettings();
   } catch (err) {
-
-    console.warn("Info-Audit: failed to load settings HTML:", err);
+    console.warn("info-audit: failed to load settings html:", err);
   }
 });
+
 
 
 // --- DRAGGABLE BUTTON LOGIC ---
@@ -101,7 +198,7 @@ function resetDraggableButtonPosition() {
 }
 
 
-// create a draggable button, appended to body (wrapper created later)
+//create a draggable button, appended to body (wrapper created later)
 function createDraggableButton() {
   if (document.getElementById('draggable-icon-btn')) return;
 
@@ -109,12 +206,19 @@ function createDraggableButton() {
   button.id = 'draggable-icon-btn';
   button.setAttribute('aria-label', 'Hover to open Info-Audit panel (draggable)');
 
-  // prefer absolute: it will sit relative to wrapper when wrapped
+  //prefer absolute: it will sit relative to wrapper when wrapped
   button.style.position = 'absolute';
 
   document.body.appendChild(button);
 
-  // restore temporary position in case wrapper isn't created yet
+  //reflect lock state on the button UI immediately
+  if (window.isLocked) {
+    button.setAttribute('data-locked', 'true');
+  } else {
+    button.removeAttribute('data-locked');
+  }
+
+  //restore temporary position in case wrapper isn't created yet
   try {
     const saved = localStorage.getItem('draggableButtonPosition');
     if (saved) {
@@ -128,38 +232,38 @@ function createDraggableButton() {
     console.warn('Info-Audit: invalid saved position', err);
   }
 
-  // --- LOCK TOGGLED STATE ---
-let isLocked = localStorage.getItem('iconLocked') === 'true';
-if (isLocked) button.setAttribute('data-locked', 'true');
+  //pointerdown starts dragging (only if unlocked)
+  button.addEventListener('pointerdown', (e) => {
+    if (window.isLocked || !e.isPrimary) return; //no drag if locked (global variable)
 
-//pointerdown starts dragging (only if unlocked)
-button.addEventListener('pointerdown', (e) => {
-  if (isLocked || !e.isPrimary) return;  //no drag if locked
+    const wrapper = document.getElementById('info-panel-wrapper');
+    const mover = wrapper || button;
+    const rect = mover.getBoundingClientRect();
 
-  const wrapper = document.getElementById('info-panel-wrapper');
-  const mover = wrapper || button;
-  const rect = mover.getBoundingClientRect();
+    _dragState.isDragging = true;
+    _dragState.pointerId = e.pointerId;
+    _dragState.offsetX = e.clientX - rect.left;
+    _dragState.offsetY = e.clientY - rect.top;
 
-  _dragState.isDragging = true;
-  _dragState.pointerId = e.pointerId;
-  _dragState.offsetX = e.clientX - rect.left;
-  _dragState.offsetY = e.clientY - rect.top;
+    button.classList.add('is-dragging');
+    button.style.cursor = 'grabbing';
+    document.body.style.userSelect = 'none';
 
-  button.classList.add('is-dragging');
-  button.style.cursor = 'grabbing';
-  document.body.style.userSelect = 'none';
+    try { button.setPointerCapture && button.setPointerCapture(e.pointerId); } catch (err) {}
+  });
 
-  try { button.setPointerCapture && button.setPointerCapture(e.pointerId); } catch (err) {}
-});
+  //right-click toggles lock state
+  button.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    //toggle and persist via the shared helper
+    setLockState(!window.isLocked);
 
-//right-click toggles lock state
-button.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  isLocked = !isLocked;
-  button.setAttribute('data-locked', isLocked);
-  localStorage.setItem('iconLocked', isLocked);
-  console.log(`Icon lock state: ${isLocked ? 'Locked' : 'Unlocked'}`);
-});
+    //ensure settings checkbox (if present) reflects the change
+    const checkbox = document.getElementById("lock-toggle-icon-position");
+    if (checkbox) checkbox.checked = window.isLocked;
+
+    console.log(`[Info Audit] Icon lock state: ${window.isLocked ? 'Locked' : 'Unlocked'}`);
+  });
 
 
   //attach global listeners once
@@ -361,6 +465,7 @@ window.addEventListener('scroll', () => {
 
 
 // Safe initialization: run even if DOMContentLoaded already fired
+//ensure lock state is set before button creation
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initDraggableExtension);
 } else {
@@ -368,9 +473,13 @@ if (document.readyState === 'loading') {
 }
 
 function initDraggableExtension() {
+  //initialize lock state from settings/localStorage
+  window.isLocked = getSavedLockState();
+  //reflect label in UI if settings already exist
+  updateLockLabel(window.isLocked);
+
   createDraggableButton();
   attachHoverPanel();
   positionInfoPanel();
   updatePanelContent();
 }
-
