@@ -7,7 +7,7 @@
     "js": "index.js",
     "css": "style.css",
     "author": "Cora Coon",
-    "version": "alpha 0.4",
+    "version": "beta 0.5",
     "license": "AGPLv3",
     "homePage": "https://github.com/cora-coon/Info-Audit.git",
     "auto_update": true,
