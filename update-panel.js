@@ -40,6 +40,10 @@ const getChatMetadata = () => {
     return {};
 };
 
+// Import highlighting functions
+import { clearHighlights, highlightAllKeywordsInMessages } from './highlight.js';
+
+
 //find triggering keywords
 export function findTriggeringKeywords(entry, options = {}) {
     try {
@@ -136,6 +140,7 @@ export function determineTriggerReason(entry) {
 
 //panel wiring
 let currentTriggeredEntries = [];
+let highlightedEntry = null;
 
 export async function updatePanelContent() {
     try {
@@ -146,7 +151,7 @@ export async function updatePanelContent() {
         const sourceUsed = 'WORLD_INFO_ACTIVATED';
 
         if (!raw || raw.length === 0) {
-            panel.innerHTML = `<div class="ia-empty">No triggered world-info entries for the last message.</div>`;
+            panel.innerHTML = `<div class="ia-empty">Nothing yet.</div>`;
             console.info('[Info-Audit] No triggered entries. sourceUsed:', sourceUsed);
             return;
         }
@@ -187,17 +192,103 @@ export async function updatePanelContent() {
                 const tooltip = keywordsStr ? `Keywords: ${keywordsStr}` : '';
                 const reasonPart = entry.reason ? (tooltip ? `\nReason: ${escapeHtml(entry.reason)}` : `Reason: ${escapeHtml(entry.reason)}`) : '';
                 const titleAttr = tooltip ? `${tooltip}${reasonPart}` : reasonPart;
-                return `<li class="ia-entry-item" title="${titleAttr}">${escapeHtml(entry.title)}</li>`;
+                return `<li class="ia-entry-item" data-title="${escapeHtml(entry.title)}" data-keywords="${escapeHtml(entry.keywords.join(', '))}" title="${titleAttr}">${escapeHtml(entry.title)}</li>`;
             }).join('');
             html += `</ul></div>`;
         }
 
         panel.innerHTML = html;
+        
+        // Remove existing event listeners to prevent duplicates
+        document.querySelectorAll('.ia-entry-item').forEach(item => {
+        });
+        
+        // Add click event listeners to entry items
+        document.querySelectorAll('.ia-entry-item').forEach(item => {
+            // Remove any existing listeners first (by re-creating the element)
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Get the entry data from the clicked item
+                const title = this.getAttribute('data-title');
+                const keywordsStr = this.getAttribute('data-keywords');
+                
+                // Clear any existing highlights
+                clearHighlights();
+                
+                // Create a mock entry object to use with the highlighting functions
+                // Only provide the key property - let findTriggeringKeywords populate _uniqueKeywords
+                const entry = {
+                    key: keywordsStr ? keywordsStr.split(',').map(k => k.trim()) : []
+                };
+                
+                // Find triggering keywords (this will populate _uniqueKeywords)
+                const chat = getChat();
+                const chatMeta = getChatMetadata();
+                findTriggeringKeywords(entry, { chat, chatMeta });
+                
+                // Highlight all keywords in messages using the sophisticated approach
+                highlightAllKeywordsInMessages(entry, { chat, chatMeta });
+            });
+        });
+        
         console.info('[Info-Audit] panel updated. source:', sourceUsed);
     } catch (err) {
         console.error('[Info-Audit] updatePanelContent crashed:', err);
     }
 }
+
+// Function to highlight keywords in chat messages
+export function highlightEntryKeywords(title, keywordsStr) {
+    // Store the highlighted entry for reference
+    highlightedEntry = { title, keywords: keywordsStr ? keywordsStr.split(',').map(k => k.trim()) : [] };
+    
+    // Remove any existing highlights
+    document.querySelectorAll('.ia-highlight').forEach(el => {
+        el.classList.remove('ia-highlight');
+    });
+    
+    // Remove any existing keyword highlights
+    document.querySelectorAll('.ia-highlight-keyword').forEach(el => {
+        el.classList.remove('ia-highlight-keyword');
+    });
+    
+    // If no keywords, just return
+    if (!keywordsStr) return;
+    
+    const keywords = keywordsStr.split(',').map(k => k.trim()).filter(k => k.length > 0);
+    
+    // Get all chat messages
+    const chatMessages = document.querySelectorAll('.mes');
+    
+    // Highlight keywords in each message
+    chatMessages.forEach(message => {
+        const messageText = message.textContent || '';
+        
+        // Check if any keyword appears in this message
+        const hasKeyword = keywords.some(keyword => 
+            keyword && messageText.toLowerCase().includes(keyword.toLowerCase())
+        );
+        
+        if (hasKeyword) {
+            // Add highlight class to the message container
+            message.classList.add('ia-highlight');
+        }
+    });
+}
+
+// Add click handler to clear highlights when clicking outside
+document.addEventListener('click', function(e) {
+    // If clicking outside the panel and entry items, clear highlights
+    if (!e.target.closest('.ia-entry-item') && !e.target.closest('#info-panel')) {
+        clearHighlights();
+    }
+});
+
+// Make sure to clear highlights when panel is updated
+export function clearHighlightsOnUpdate() {
+    clearHighlights();
+}
+
 
 //listen for events
 if (typeof SillyTavern !== 'undefined' && SillyTavern.onMessageGenerated) {
