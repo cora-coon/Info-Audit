@@ -285,21 +285,6 @@ function attachHoverPanel() {
   wrapper.addEventListener('focusout', closePanelDelayed);
 }
 
-//positionpanelrelativetowrapper
-function positionInfoPanel() {
-  const wrapper = document.getElementById('info-panel-wrapper');
-  const panel = document.getElementById('info-panel');
-  if (!panel) return;
-  panel.style.zIndex = '9999';
-  if (!wrapper) {
-    const icon = document.getElementById('draggable-icon-btn');
-    if (!icon) return;
-    const rect = icon.getBoundingClientRect();
-    panel.style.position = 'fixed';
-    panel.style.top = `${rect.top + rect.height + 6}px`;
-    panel.style.left = `${rect.left}px`;
-  }
-}
 
 //windowresizescroll
 window.addEventListener('resize', positionInfoPanel);
@@ -322,6 +307,22 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDraggableExtension);
 } else {
     initDraggableExtension();
+}
+
+//positionpanelrelativetowrapper
+function positionInfoPanel() {
+  const wrapper = document.getElementById('info-panel-wrapper');
+  const panel = document.getElementById('info-panel');
+  if (!panel) return;
+  panel.style.zIndex = '9999';
+  if (!wrapper) {
+    const icon = document.getElementById('draggable-icon-btn');
+    if (!icon) return;
+    const rect = icon.getBoundingClientRect();
+    panel.style.position = 'fixed';
+    panel.style.top = `${rect.top + rect.height + 6}px`;
+    panel.style.left = `${rect.left}px`;
+  }
 }
 
 function initDraggableExtension() {

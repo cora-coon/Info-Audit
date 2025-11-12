@@ -151,7 +151,7 @@ export async function updatePanelContent() {
         const sourceUsed = 'WORLD_INFO_ACTIVATED';
 
         if (!raw || raw.length === 0) {
-            panel.innerHTML = `<div class="ia-empty">No triggered world-info entries for the last message.</div>`;
+            panel.innerHTML = `<div class="ia-empty">Nothing yet.</div>`;
             console.info('[Info-Audit] No triggered entries. sourceUsed:', sourceUsed);
             return;
         }
@@ -201,7 +201,6 @@ export async function updatePanelContent() {
         
         // Remove existing event listeners to prevent duplicates
         document.querySelectorAll('.ia-entry-item').forEach(item => {
-            // We can't easily remove event listeners, so we'll just reattach them
         });
         
         // Add click event listeners to entry items
