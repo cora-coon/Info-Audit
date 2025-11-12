@@ -70,7 +70,7 @@
 .info-panel {
   position: fixed;             /* will be positioned in index.js */
   min-width: 180px;
-  background: #333;
+  background: #252525;
   padding: 8px 10px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   z-index: 1000;
@@ -123,3 +123,47 @@
 }
 
 
+.ia-world-header,
+.ia-lorebook-header {
+  cursor: default;
+  font-weight: bold;
+  padding: 2px 4px;
+  user-select: none;
+}
+
+.ia-toggle {
+  float: right;
+}
+.ia-entry-list {
+  padding-left: 1em;
+  margin: 2px 0;
+}
+.ia-entry-item {
+  list-style: none;
+  margin-left: 1em;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.ia-entry-item:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.ia-world-header:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+/* Empty state styling */
+.ia-empty {
+  color: #999;
+  font-style: italic;
+  padding: 8px 10px;
+}
+
+/* Hidden data source for debugging */
+.ia-source-hidden {
+  display: none;
+}

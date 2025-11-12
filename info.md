@@ -1,6 +1,11 @@
+
+12-Nov-25
+- Made info panel prettier, hid data-source on list.
+
 11-Nov-25
 - Made magnifying glass icon able to lock into position with right-click. Added toggle lock/unlock checkbox to extension settings panel.
 - When moused over info panel, panel stays until moused off.
+- Replaced temporary coordinates in info panel with actual world entry info, hover over to see tooltip for triggering keywords and reason.
 
 10-Nov-25
 - Added info panel to magnifying glass icon. Hover over to display. Currently shows coordinates as temporary information. Follows icon when dragging.
