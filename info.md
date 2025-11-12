@@ -1,6 +1,9 @@
 
 12-Nov-25
 - Made info panel prettier, hid data-source on list.
+- Added highlight.js.
+- Updated keyword triggering function to previous experiments.
+- Added highlight feature, click entry word to highlight triggering keywords in recent messages, using previous experiments for reference.
 
 11-Nov-25
 - Made magnifying glass icon able to lock into position with right-click. Added toggle lock/unlock checkbox to extension settings panel.

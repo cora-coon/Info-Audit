@@ -122,9 +122,8 @@
   transform: translateY(0);
 }
 
-
-.ia-world-header,
-.ia-lorebook-header {
+/* panel content styles */
+.ia-world-header {
   cursor: default;
   font-weight: bold;
   padding: 2px 4px;
@@ -156,14 +155,31 @@
   border-radius: 3px;
 }
 
-/* Empty state styling */
+/* empty state styling */
 .ia-empty {
   color: #999;
   font-style: italic;
   padding: 8px 10px;
 }
 
-/* Hidden data source for debugging */
+/* hidden data source for debugging */
 .ia-source-hidden {
   display: none;
+}
+
+/* highlight keywords in messages */
+.ia-highlight {
+  background-color: rgba(255, 255, 0, 0.3) !important;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+}
+
+/* highlight specific keywords within messages */
+.ia-highlight-keyword {
+  background-color: rgba(255, 255, 0, 0.7) !important;
+  border-radius: 2px;
+  padding: 0 2px;
+  font-weight: bold;
+  box-shadow: 0 0 3px rgba(255, 255, 0, 0.5);
 }
