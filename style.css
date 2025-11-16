@@ -83,6 +83,20 @@
   background-color: #be74be; /* hover colour */
 }
 
+/* add black circle behind badge on hover */
+#draggable-icon-btn:hover #draggable-icon-counter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;   /* equal width */
+  height: 20px;  /* equal height */
+  border-radius: 50%;    /* make it a circle */
+  background: black;
+  transform: translate(-50%, -50%); /* center behind the badge */
+  z-index: -1;           /* place behind the badge text */
+}
+
 #draggable-icon-btn:active {
   cursor: grabbing;
   transform: scale(1.1); /* increase size on click */
