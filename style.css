@@ -92,7 +92,7 @@
   width: 20px;   /* equal width */
   height: 20px;  /* equal height */
   border-radius: 50%;    /* make it a circle */
-  background: black;
+  background: #252525;
   transform: translate(-50%, -50%); /* center behind the badge */
   z-index: -1;           /* place behind the badge text */
 }
