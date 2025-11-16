@@ -153,6 +153,16 @@ export async function updatePanelContent() {
         if (!raw || raw.length === 0) {
             panel.innerHTML = `<div class="ia-empty">Nothing yet.</div>`;
             console.info('[Info-Audit] No triggered entries. sourceUsed:', sourceUsed);
+            
+            // Update badge counter to show 0 when no entries
+            const iconButton = document.getElementById('draggable-icon-btn');
+            const counterElement = document.getElementById('draggable-icon-counter');
+            if (iconButton) {
+                iconButton.setAttribute('data-count', '0');
+            }
+            if (counterElement) {
+                counterElement.textContent = '0';
+            }
             return;
         }
 
@@ -179,6 +189,19 @@ export async function updatePanelContent() {
             const keywords = Array.isArray(e.triggeringKeywords) ? e.triggeringKeywords.map(k => String(k)) : [];
             grouped[world] = grouped[world] || [];
             grouped[world].push({ title, keywords, reason: e.triggerReason ?? 'Unknown' });
+        }
+
+        // Calculate total count of triggered entries
+        const totalCount = computed.length;
+
+        // Update badge counter on the separate counter element
+        const iconButton = document.getElementById('draggable-icon-btn');
+        const counterElement = document.getElementById('draggable-icon-counter');
+        if (iconButton) {
+            iconButton.setAttribute('data-count', totalCount.toString());
+        }
+        if (counterElement) {
+            counterElement.textContent = totalCount.toString();
         }
 
         //render: world -> entries
