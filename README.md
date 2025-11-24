@@ -15,6 +15,7 @@ An extension to examine and trace ST WorldInfo entries — designed to help user
 
 ### Installation
 - Use ST extension installer. `https://github.com/cora-coon/Info-Audit.git`
+
 ### Usage
 - Magnifying Glass icon defaults to top left of screen.
 - Click to drag icon, moveable.
@@ -29,9 +30,8 @@ An extension to examine and trace ST WorldInfo entries — designed to help user
 
 ## Support
 - If you're looking for tech support, please use github. I'll do my best to respond as soon as I can. I am also new to JavaScript, and still learning.
-
 - If you like my work, please support me at: https://ko-fi.com/cora_coon
 
-## License
-- AGPLv3
-- Fair Use
+
+---
+<small>*Built independently with inspiration drawn from a concept I respected.*</small>
