@@ -14,7 +14,7 @@
 
 /* draggable icon button styles */
 #draggable-icon-btn {
-  position: absolute; /* allow the button to be positioned inside the wrapper */
+  position: relative; /* allow the button to be positioned inside the wrapper */
   
   z-index: 1000;
 
@@ -22,34 +22,79 @@
   width: 40px;
   height: 40px;
 
-  /* icon colour (default) */
-  color: #333; /* change to currentColor for inheritance */
-  background-color: currentColor;
+  /* Make button transparent so pseudo-element can show through */
+  background: none;
+  border: none;
+  cursor: grab;
+  transition: transform 0.2s ease-in-out;
+  position: relative;
+}
 
-  mask-image: url('assets/magnifying-glass-icon.svg');
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+/* Pseudo-element for the magnifying glass icon */
+#draggable-icon-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0; /* fill the button area */
+  background-color: currentColor; /* this is the “fill” color */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* icon colour */
+  background-color: #333;
+  
+  /* SVG icon as background image */
+ /* apply the mask only to this pseudo-element */
   -webkit-mask-image: url('assets/magnifying-glass-icon.svg');
-  -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-
-  /* visuals and interactivity */
-  background-image: none;
-  border: none;
-  border-radius: 0;
-  background-color: currentColor; /* mask colour */
-
+  -webkit-mask-size: contain;
+  mask-image: url('assets/magnifying-glass-icon.svg');
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  
+  /* drop shadow for the icon */
   filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+}
 
-  cursor: grab;
-  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+/* Badge counter for triggered entries */
+#draggable-icon-counter {
+  position: relative;
+  top: -8px;
+  right: -6px;
+  color: currentColor;
+  font-size: 12px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 1001;
+}
+
+#draggable-icon-btn[data-count]:not([data-count="0"]) #draggable-icon-counter {
+  opacity: 1;
 }
 
 
-#draggable-icon-btn:hover {
-  color: #be74be; /* hover colour (default) */
+#draggable-icon-btn:hover::before {
+  background-color: #be74be; /* hover colour */
+}
+
+/* add black circle behind badge on hover */
+#draggable-icon-btn:hover #draggable-icon-counter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;   /* equal width */
+  height: 20px;  /* equal height */
+  border-radius: 50%;    /* make it a circle */
+  background: #252525;
+  transform: translate(-50%, -50%); /* center behind the badge */
+  z-index: -1;           /* place behind the badge text */
 }
 
 #draggable-icon-btn:active {
@@ -58,9 +103,12 @@
 }
 
 /* add styles for locked state */
+#draggable-icon-btn[data-locked="true"]::before {
+  filter: brightness(0.7) drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+}
+
 #draggable-icon-btn[data-locked="true"] {
   cursor: not-allowed !important;
-  filter: brightness(0.7);
 }
 
 
@@ -132,6 +180,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 0.85em; /* Reduced font size for better compactness */
 }
 
 .ia-toggle {
@@ -144,7 +193,7 @@
 .ia-entry-item {
   list-style: none;
   margin-left: 1em;
-  font-size: 0.9em;
+  font-size: 0.8em; /* Reduced font size for better compactness */
   transition: background-color 0.2s ease;
   white-space: nowrap;
   overflow: hidden;

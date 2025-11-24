@@ -1,4 +1,11 @@
 
+24-Nov-25
+- Update README.md for more information. Included image for visual reference.
+
+16-Nov-25
+- Added number count badge to display over icon, then added dark circle behind it when mouse hovers over, for better visibility and distinction.
+- Updated click-to-highlight, to be able to turn off highlight while still clicking the entry, instead of having to click off the list.
+
 12-Nov-25
 - Made info panel prettier, hid data-source on list.
 - Added highlight.js.

@@ -153,6 +153,16 @@ export async function updatePanelContent() {
         if (!raw || raw.length === 0) {
             panel.innerHTML = `<div class="ia-empty">Nothing yet.</div>`;
             console.info('[Info-Audit] No triggered entries. sourceUsed:', sourceUsed);
+            
+            // Update badge counter to show 0 when no entries
+            const iconButton = document.getElementById('draggable-icon-btn');
+            const counterElement = document.getElementById('draggable-icon-counter');
+            if (iconButton) {
+                iconButton.setAttribute('data-count', '0');
+            }
+            if (counterElement) {
+                counterElement.textContent = '0';
+            }
             return;
         }
 
@@ -179,6 +189,19 @@ export async function updatePanelContent() {
             const keywords = Array.isArray(e.triggeringKeywords) ? e.triggeringKeywords.map(k => String(k)) : [];
             grouped[world] = grouped[world] || [];
             grouped[world].push({ title, keywords, reason: e.triggerReason ?? 'Unknown' });
+        }
+
+        // Calculate total count of triggered entries
+        const totalCount = computed.length;
+
+        // Update badge counter on the separate counter element
+        const iconButton = document.getElementById('draggable-icon-btn');
+        const counterElement = document.getElementById('draggable-icon-counter');
+        if (iconButton) {
+            iconButton.setAttribute('data-count', totalCount.toString());
+        }
+        if (counterElement) {
+            counterElement.textContent = totalCount.toString();
         }
 
         //render: world -> entries
@@ -212,8 +235,19 @@ export async function updatePanelContent() {
                 const title = this.getAttribute('data-title');
                 const keywordsStr = this.getAttribute('data-keywords');
                 
-                // Clear any existing highlights
+                // Check if this is the same entry that's already highlighted
+                if (highlightedEntry && highlightedEntry.title === title) {
+                    // Same entry clicked again - clear highlights and reset
+                    clearHighlights();
+                    highlightedEntry = null;
+                    return;
+                }
+                
+                // Different entry or no entry highlighted - clear any existing highlights
                 clearHighlights();
+                
+                // Store the currently highlighted entry
+                highlightedEntry = { title, keywordsStr };
                 
                 // Create a mock entry object to use with the highlighting functions
                 // Only provide the key property - let findTriggeringKeywords populate _uniqueKeywords
@@ -237,44 +271,6 @@ export async function updatePanelContent() {
     }
 }
 
-// Function to highlight keywords in chat messages
-export function highlightEntryKeywords(title, keywordsStr) {
-    // Store the highlighted entry for reference
-    highlightedEntry = { title, keywords: keywordsStr ? keywordsStr.split(',').map(k => k.trim()) : [] };
-    
-    // Remove any existing highlights
-    document.querySelectorAll('.ia-highlight').forEach(el => {
-        el.classList.remove('ia-highlight');
-    });
-    
-    // Remove any existing keyword highlights
-    document.querySelectorAll('.ia-highlight-keyword').forEach(el => {
-        el.classList.remove('ia-highlight-keyword');
-    });
-    
-    // If no keywords, just return
-    if (!keywordsStr) return;
-    
-    const keywords = keywordsStr.split(',').map(k => k.trim()).filter(k => k.length > 0);
-    
-    // Get all chat messages
-    const chatMessages = document.querySelectorAll('.mes');
-    
-    // Highlight keywords in each message
-    chatMessages.forEach(message => {
-        const messageText = message.textContent || '';
-        
-        // Check if any keyword appears in this message
-        const hasKeyword = keywords.some(keyword => 
-            keyword && messageText.toLowerCase().includes(keyword.toLowerCase())
-        );
-        
-        if (hasKeyword) {
-            // Add highlight class to the message container
-            message.classList.add('ia-highlight');
-        }
-    });
-}
 
 // Add click handler to clear highlights when clicking outside
 document.addEventListener('click', function(e) {

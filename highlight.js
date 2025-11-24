@@ -4,7 +4,7 @@
 // Inject highlight style and load mark.js
 const style = document.createElement('style');
 style.textContent = `
-.stwii--wi-highlight, mark.stwii--wi-highlight {
+.wi-highlight, mark.wi-highlight {
     background: yellow;
     padding: 0 0.1em;
     border-radius: 2px;
@@ -18,21 +18,18 @@ if (!window.Mark) {
 }
 
 // Clear all highlights
-export let activeHighlightedEntry = null;
-
 export function clearHighlights() {
     document.querySelectorAll('#chat .mes .mes_text, #chat .mes').forEach(mesEl => {
         if (window.Mark) {
             const instance = new window.Mark(mesEl);
-            instance.unmark({ className: 'stwii--wi-highlight' });
+            instance.unmark({ className: 'wi-highlight' });
         } else {
-            mesEl.querySelectorAll('mark.stwii--wi-highlight').forEach(mark => {
+            mesEl.querySelectorAll('mark.wi-highlight').forEach(mark => {
                 const parent = mark.parentNode;
                 if (parent) parent.replaceChild(document.createTextNode(mark.textContent || ''), mark);
             });
         }
     });
-    activeHighlightedEntry = null;
 }
 
 // Highlight all keywords in messages for a specific entry
@@ -59,7 +56,7 @@ export function highlightAllKeywordsInMessages(entry, options = {}) {
                 keywords.forEach(keyword => {
                     const escaped = keyword.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                     const pattern = new RegExp(`\\b${escaped}\\b`, 'gi');
-                    instance.markRegExp(pattern, { className: 'stwii--wi-highlight' });
+                    instance.markRegExp(pattern, { className: 'wi-highlight' });
                 });
             }
         }

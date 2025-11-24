@@ -156,8 +156,16 @@ function createDraggableButton() {
   const button = document.createElement('button');
   button.id = 'draggable-icon-btn';
   button.setAttribute('aria-label', 'Hover to open Info-Audit panel (draggable)');
+  button.setAttribute('data-count', '0'); // Initialize badge counter
   button.style.position = 'absolute';
   document.body.appendChild(button);
+  
+  // Create counter element as a child of the button
+  const counter = document.createElement('span');
+  counter.id = 'draggable-icon-counter';
+  counter.textContent = '0';
+  button.appendChild(counter);
+  
   if (window.isLocked) button.setAttribute('data-locked', 'true');
 
 //restoresavedposition
