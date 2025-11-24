@@ -34,4 +34,4 @@ An extension to examine and trace ST WorldInfo entries — designed to help user
 
 
 ---
-<small>*Built independently with inspiration drawn from a concept I respected.*</small>
+<small>*Built independently with inspiration drawn from a concept I respected, implemented in my own way.*</small>
