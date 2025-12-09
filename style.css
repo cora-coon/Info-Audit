@@ -124,9 +124,6 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   z-index: 1000;
 
-  max-height: 400px; /* Adjust this value (e.g., 400px) to your desired maximum panel height */
-  overflow-y: auto;  /* This creates the vertical scrollbar when content exceeds max-height */
-
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
@@ -192,7 +189,12 @@
 .ia-entry-list {
   padding-left: 1em;
   margin: 2px 0;
+
+  max-height: 250px; /* Adjust this number to change how tall the list gets */
+  overflow-y: auto;  /* Adds the vertical scrollbar */
+  overflow-x: hidden; /* Prevents horizontal scrolling if text gets too long */
 }
+
 .ia-entry-item {
   list-style: none;
   margin-left: 1em;
