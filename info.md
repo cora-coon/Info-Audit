@@ -1,3 +1,5 @@
+09-Dec-25
+- Added a scrollbar to the info panel and made it pretty.
 
 24-Nov-25
 - Update README.md for more information. Included image for visual reference.
