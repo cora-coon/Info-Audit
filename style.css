@@ -124,6 +124,9 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   z-index: 1000;
 
+  max-height: 400px; /* Adjust this value (e.g., 400px) to your desired maximum panel height */
+  overflow-y: auto;  /* This creates the vertical scrollbar when content exceeds max-height */
+
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
